@@ -1,0 +1,132 @@
+<%- include('./partials/header') %>
+
+<div class="pt-24"></div>
+
+<% if(success.length > 0){ %>
+    <div class="absolute top-8 left-1/2 -translate-x-1/2 p-4 rounded-xl bg-blue-500 shadow-lg z-50">
+        <span class="text-white font-medium">
+            <%= success %>
+        </span>
+    </div>
+<% } %>
+
+<div class="w-full min-h-screen flex px-10 lg:px-20 py-10 bg-[#FAFAFA]">
+
+    <!-- Sidebar -->
+    <div class="w-[25%] pr-10 sticky top-28 self-start">
+
+        <!-- Sort -->
+        <div>
+            <div class="flex items-center gap-3 mb-10">
+                <h3 class="font-semibold text-lg">
+                    Sort By
+                </h3>
+
+                <form action="/shop" method="get">
+                    <select
+                        name="sort"
+                        onchange="this.form.submit()"
+                        class="bg-white border border-zinc-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+                        <option value="popular" <%= sort === 'popular' || !sort ? 'selected' : '' %>>Popular</option>
+                        <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>Newest</option>
+
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="mb-12">
+            <h4 class="font-semibold text-lg mb-5">
+                Collections
+            </h4>
+
+            <div class="flex flex-col">
+                <a class="mb-3 text-zinc-600 hover:text-blue-600 transition font-medium"
+                    href="/shop?sort=<%= sort || 'popular' %>">
+                    All Products
+                </a>
+
+                <a class="mb-3 text-zinc-600 hover:text-blue-600 transition font-medium"
+                    href="/shop?sort=<%= sort || 'popular' %>&collection=discounted">
+                    Discounted Products
+                </a>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div>
+            <h4 class="font-semibold text-lg mb-5">
+                Filters
+            </h4>
+
+            <div class="flex flex-col">
+                <a class="mb-3 text-zinc-600 hover:text-blue-600 transition font-medium"
+                    href="/shop?sort=<%= sort || 'popular' %>&filter=availability">
+                    Availability
+                </a>
+
+                <a class="mb-3 text-zinc-600 hover:text-blue-600 transition font-medium"
+                    href="/shop?sort=<%= sort || 'popular' %>&filter=discount">
+                    Discount
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Products -->
+    <div class="w-[75%]">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+
+            <% products.forEach(function(product){ %>
+
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 group">
+
+                    <!-- Product Image -->
+                    <div class="w-full h-64 flex items-center justify-center bg-[<%= product.bgcolor %>] overflow-hidden">
+
+                        <img
+                            class="h-52 object-contain transition duration-300 group-hover:scale-105"
+                            src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
+                            alt="<%= product.name %>">
+
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="flex justify-between items-center px-5 py-5">
+
+                        <div>
+                            <h3 class="font-semibold text-lg">
+                                <%= product.name %>
+                            </h3>
+
+                            <h4 class="mt-1 font-medium text-zinc-700">
+                                ₹ <%= product.price %>
+                            </h4>
+                             
+                        </div>
+
+                        <a
+                            href="/addtocart/<%= product._id %>"
+                            class="w-11 h-11 rounded-full bg-zinc-900 text-white flex items-center justify-center hover:bg-blue-600 transition">
+
+                            <i class="ri-shopping-bag-line"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    </div>
+
+</div>
+
+<%- include('./partials/footer') %>

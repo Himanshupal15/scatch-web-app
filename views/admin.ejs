@@ -1,0 +1,106 @@
+<%- include('./partials/header') %>
+
+<div class="pt-24"></div>
+
+<div class="w-full min-h-screen bg-[#FAFAFA] px-10 lg:px-20 py-10">
+
+    <div class="flex flex-col lg:flex-row gap-10">
+
+        <!-- Sidebar -->
+        <div class="lg:w-[25%]">
+
+            <div class="bg-white rounded-3xl shadow-sm p-8 sticky top-28">
+
+                <h2 class="font-['Playfair_Display'] text-3xl font-bold mb-8">
+                    Admin Panel
+                </h2>
+
+                <div class="flex flex-col gap-4">
+
+                    <a
+                        class="font-medium text-zinc-700 hover:text-blue-600 transition"
+                        href="">
+                        All Products
+                    </a>
+
+                    <a
+                        class="font-medium text-zinc-700 hover:text-blue-600 transition"
+                        href="">
+                        Create New Product
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Products -->
+        <div class="lg:w-[75%]">
+
+            <div class="flex justify-between items-center mb-8">
+
+                <h2 class="font-['Playfair_Display'] text-4xl font-bold">
+                    Products
+                </h2>
+
+                <a
+                    class="px-5 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition"
+                    href="">
+                    Delete All
+                </a>
+
+            </div>
+
+            <!-- Product Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+
+                <% for(let i = 0; i < 8; i++) { %>
+
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 group">
+
+                    <!-- Image -->
+                    <div class="w-full h-56 bg-zinc-100 flex items-center justify-center overflow-hidden">
+
+                        <div class="w-full h-full bg-zinc-200"></div>
+
+                    </div>
+
+                    <!-- Details -->
+                    <div class="px-5 py-5 flex justify-between items-center">
+
+                        <div>
+
+                            <h3 class="font-semibold text-lg">
+                                Clinge Bag
+                            </h3>
+
+                            <h4 class="text-zinc-600 mt-1">
+                                ₹ 1200
+                            </h4>
+
+                        </div>
+
+                        <a
+                            class="w-11 h-11 rounded-full bg-zinc-900 text-white flex items-center justify-center hover:bg-blue-600 transition"
+                            href="">
+
+                            <i class="ri-edit-line"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <% } %>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<%- include('./partials/footer') %>

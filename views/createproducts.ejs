@@ -1,0 +1,188 @@
+<%- include('./partials/header') %>
+
+<div class="pt-24"></div>
+
+<% if(success.length > 0){ %>
+    <div class="fixed top-24 left-1/2 -translate-x-1/2 p-4 rounded-2xl bg-green-500 shadow-lg z-50">
+        <span class="text-white font-medium">
+            <%= success %>
+        </span>
+    </div>
+<% } %>
+
+<div class="min-h-screen bg-[#FAFAFA] px-10 lg:px-20 py-10">
+
+    <div class="flex flex-col lg:flex-row gap-10">
+
+        <!-- Sidebar -->
+        <aside class="lg:w-[25%]">
+
+            <div class="bg-white rounded-3xl shadow-sm p-8 sticky top-28">
+
+                <h2 class="font-['Playfair_Display'] text-3xl font-bold mb-8">
+                    Admin Panel
+                </h2>
+
+                <div class="flex flex-col gap-4">
+
+                    <a
+                        class="font-medium text-zinc-700 hover:text-blue-600 transition"
+                        href="/owners/admin">
+                        All Products
+                    </a>
+
+                    <a
+                        class="font-medium text-blue-600"
+                        href="/owners/create">
+                        Create New Product
+                    </a>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="lg:w-[75%]">
+
+            <div class="bg-white rounded-3xl shadow-sm p-10">
+
+                <h2 class="font-['Playfair_Display'] text-4xl font-bold text-zinc-900 mb-10">
+                    Create New Product
+                </h2>
+
+                <form
+                    autocomplete="off"
+                    action="/products/create"
+                    method="post"
+                    enctype="multipart/form-data">
+
+                    <!-- Product Details -->
+                    <div class="mb-12">
+
+                        <h3 class="text-2xl font-semibold text-zinc-800 mb-6">
+                            Product Details
+                        </h3>
+
+                        <!-- Image Upload -->
+                        <div class="mb-8">
+
+                            <label class="block mb-3 font-medium text-zinc-700">
+                                Product Image
+                            </label>
+
+                            <input
+                                name="image"
+                                type="file"
+                                required
+                                class="w-full border border-dashed border-zinc-300 rounded-2xl p-4 file:mr-4 file:px-5 file:py-2 file:rounded-xl file:border-0 file:bg-blue-500 file:text-white hover:file:bg-blue-600">
+
+                        </div>
+
+                        <!-- Product Inputs -->
+                        <div class="grid md:grid-cols-2 gap-6">
+
+                            <input
+                                name="name"
+                                type="text"
+                                placeholder="Product Name"
+                                required
+                                class="border border-zinc-200 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+                            <input
+                                name="price"
+                                type="number"
+                                placeholder="Price"
+                                required
+                                class="border border-zinc-200 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+                            <input
+                                name="discount"
+                                type="number"
+                                placeholder="Discount"
+                                class="border border-zinc-200 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Theme Settings -->
+                    <div>
+
+                        <h3 class="text-2xl font-semibold text-zinc-800 mb-6">
+                            Product Theme
+                        </h3>
+
+                        <div class="grid md:grid-cols-3 gap-6">
+
+                            <div>
+
+                                <label class="block mb-2 text-zinc-600">
+                                    Background Color
+                                </label>
+
+                                <input
+                                    name="bgcolor"
+                                    type="color"
+                                    value="#f4f4f5"
+                                    class="w-full h-14 rounded-xl cursor-pointer border border-zinc-200">
+
+                            </div>
+
+                            <div>
+
+                                <label class="block mb-2 text-zinc-600">
+                                    Panel Color
+                                </label>
+
+                                <input
+                                    name="panelcolor"
+                                    type="color"
+                                    value="#ffffff"
+                                    class="w-full h-14 rounded-xl cursor-pointer border border-zinc-200">
+
+                            </div>
+
+                            <div>
+
+                                <label class="block mb-2 text-zinc-600">
+                                    Text Color
+                                </label>
+
+                                <input
+                                    name="textcolor"
+                                    type="color"
+                                    value="#18181b"
+                                    class="w-full h-14 rounded-xl cursor-pointer border border-zinc-200">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="mt-12">
+
+                        <button
+                            type="submit"
+                            class="px-8 py-4 bg-zinc-900 text-white rounded-2xl font-medium hover:bg-black transition">
+
+                            Create Product
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+<%- include('./partials/footer') %>

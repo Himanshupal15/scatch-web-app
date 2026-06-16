@@ -1,0 +1,136 @@
+<%- include('./partials/header') %>
+
+<div class="pt-24"></div>
+
+<% if(error && error.length > 0){ %>
+    <div class="absolute top-8 left-1/2 -translate-x-1/2 p-4 rounded-xl bg-red-500 shadow-lg z-50">
+        <span class="text-white font-medium">
+            <%= error[0] %>
+        </span>
+    </div>
+<% } %>
+
+<div class="w-full min-h-[calc(100vh-96px)] flex bg-[#FAFAFA]">
+
+    <!-- Register Section -->
+    <div class="w-1/2 flex items-center justify-center px-10">
+
+        <div class="w-full max-w-md">
+
+            <!-- Modern Branding -->
+            <div class="mb-10">
+
+                <span class="uppercase tracking-[0.45em] text-xs text-blue-500 font-semibold">
+                    SCATCH
+                </span>
+
+                <h3 class="text-4xl font-bold text-zinc-900 mt-3">
+                    Create Your Account
+                </h3>
+
+                <p class="text-zinc-500 mt-3 leading-relaxed">
+                    Join Scatch and explore premium bags designed for modern lifestyles.
+                </p>
+
+            </div>
+
+            <form autocomplete="off" action="/users/register" method="post">
+
+                <input type="text" name="fakeUsername" autocomplete="username" style="display:none" />
+                <input type="password" name="fakePassword" autocomplete="new-password" style="display:none" />
+
+                <input
+                    autocomplete="name"
+                    class="w-full px-4 py-3 mb-4 bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    type="text"
+                    placeholder="Full Name"
+                    name="fullname"
+                    required>
+
+                <input
+                    autocomplete="email"
+                    class="w-full px-4 py-3 mb-4 bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    type="email"
+                    placeholder="Email Address"
+                    name="email"
+                    required>
+
+                <input
+                    autocomplete="new-password"
+                    class="w-full px-4 py-3 mb-6 bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    type="password"
+                    placeholder="Create Password"
+                    name="password"
+                    required>
+
+                <input
+                    class="w-full py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition cursor-pointer"
+                    type="submit"
+                    value="Create My Account">
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Divider -->
+    <div class="w-px bg-zinc-200 my-20"></div>
+
+    <!-- Login Section -->
+    <div class="w-1/2 flex items-center justify-center px-10">
+
+        <div class="w-full max-w-md">
+
+            <!-- Modern Branding -->
+            <div class="mb-10">
+
+                <span class="uppercase tracking-[0.45em] text-xs text-blue-500 font-semibold">
+                    SCATCH
+                </span>
+
+                <h3 class="text-4xl font-bold text-zinc-900 mt-3">
+                    Welcome Back
+                </h3>
+
+                <p class="text-zinc-500 mt-3 leading-relaxed">
+                    Sign in to continue your shopping experience.
+                </p>
+
+            </div>
+
+            <form autocomplete="off" action="/users/login" method="post">
+
+                <input type="text" name="fakeUsername" autocomplete="username" style="display:none" />
+                <input type="password" name="fakePassword" autocomplete="current-password" style="display:none" />
+
+                <input
+                    autocomplete="username"
+                    class="w-full px-4 py-3 mb-4 bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    type="email"
+                    placeholder="Email Address"
+                    name="email"
+                    required>
+
+                <input
+                    autocomplete="current-password"
+                    class="w-full px-4 py-3 mb-6 bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    type="password"
+                    placeholder="Enter Password"
+                    name="password"
+                    required>
+
+                <input
+                    class="w-full py-3 bg-zinc-900 text-white rounded-xl font-medium hover:bg-black transition cursor-pointer"
+                    type="submit"
+                    value="Login">
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<%- include('./partials/footer') %>
