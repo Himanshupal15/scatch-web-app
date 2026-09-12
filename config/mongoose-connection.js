@@ -4,6 +4,10 @@ const dbgr = require("debug")("development:mongoose");
 
 let mongoURI = process.env.MONGODB_URI || process.env.MONGO_URI;
 
+if (process.env.NODE_ENV === "production" && !mongoURI) {
+  throw new Error("MONGODB_URI must be configured in production.");
+}
+
 if (!mongoURI) {
   try {
     mongoURI = config.has("MONGODB_URI") ? config.get("MONGODB_URI") : "mongodb://127.0.0.1:27017/scatch";

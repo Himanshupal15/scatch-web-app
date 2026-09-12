@@ -1,5 +1,13 @@
 require("dotenv").config();
 
+if (process.env.NODE_ENV === "production") {
+  const requiredEnvVars = ["MONGODB_URI", "JWT_KEY", "EXPRESS_SESSION_SECRET"];
+  const missingEnvVars = requiredEnvVars.filter((name) => !process.env[name]);
+  if (missingEnvVars.length > 0) {
+    throw new Error(`Missing production environment variables: ${missingEnvVars.join(", ")}`);
+  }
+}
+
 const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
@@ -28,7 +36,7 @@ app.use(
   expressSession({
     resave: false,
     saveUninitialized: false,
-    secret: process.env.EXPRESS_SESSION_SECRET || "scatch_default_session_secret_123456",
+    secret: process.env.EXPRESS_SESSION_SECRET,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       secure: process.env.NODE_ENV === "production",
@@ -68,7 +76,7 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 
 if (require.main === module) {
-  const server = app.listen(PORT, () => {
+  const server = app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is running on port ${PORT}`);
     console.log(`http://localhost:${PORT}`);
   });

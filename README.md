@@ -173,3 +173,14 @@ npm test
    node utils/seed.js
    ```
 6. Open your deployed live URL and sign in!
+
+### Deployment Troubleshooting
+
+If the service fails during startup, verify that the hosting provider has all of these environment variables configured for the service, not only in a local `.env` file:
+
+- `NODE_ENV=production`
+- `MONGODB_URI` set to a reachable MongoDB Atlas connection string
+- `JWT_KEY` set to a long random secret
+- `EXPRESS_SESSION_SECRET` set to a different long random secret
+
+The application listens on the platform-provided `PORT` and binds to `0.0.0.0`. After adding or changing environment variables, trigger a new deployment.
