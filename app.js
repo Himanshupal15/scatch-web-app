@@ -1,47 +1,82 @@
-const  express = require('express');
+require("dotenv").config();
+
+const express = require("express");
 const app = express();
-const cookieParser = require('cookie-parser');
-const path = require('path');
+const cookieParser = require("cookie-parser");
+const path = require("path");
+const expressSession = require("express-session");
+const flash = require("connect-flash");
+
+// Database connection
 const db = require("./config/mongoose-connection");
+
+// Routers
 const ownersRouter = require("./routes/ownersRouter");
 const productsRouter = require("./routes/productsRouter");
 const usersRouter = require("./routes/usersRouter");
 const indexRouter = require("./routes/index");
-const expressSession = require("express-session");
-const flash = require("connect-flash");
 
-require("dotenv").config();
+// Proxy trust for cloud deployment platforms (Render, Heroku, Railway)
+app.set("trust proxy", 1);
 
+// Core Middlewares
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(
-    expressSession({
-        resave:false,
-        saveUninitialized:false,
-        secret:process.env.EXPRESS_SESSION_SECRET,
-    })
+  expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.EXPRESS_SESSION_SECRET || "scatch_default_session_secret_123456",
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    },
+  })
 );
+
 app.use(flash());
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, "public")));
+app.set("view engine", "ejs");
 
-app.use('/owners', ownersRouter );
-app.use('/users',usersRouter);
-app.use('/products',productsRouter);
+// Global view variables
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.isOwner = Boolean(req.cookies && req.cookies.ownerToken);
+  res.locals.isUser = Boolean(req.cookies && req.cookies.token);
+  next();
+});
 
+// Route Handlers
+app.use("/owners", ownersRouter);
+app.use("/users", usersRouter);
+app.use("/products", productsRouter);
 app.use("/", indexRouter);
 
+// 404 Handler
+app.use((req, res) => {
+  res.status(404).render("index", {
+    error: ["The page you requested was not found."],
+    success: [],
+    loggedin: false,
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, () => {
+if (require.main === module) {
+  const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log(`http://localhost:${PORT}`);
-});
+  });
 
-server.on('error', (err) => {
-    console.error('Server failed to start:', err);
+  server.on("error", (err) => {
+    console.error("Server failed to start:", err);
     process.exit(1);
-});
+  });
+}
+
+module.exports = app;

@@ -2,41 +2,129 @@
 
 <div class="pt-24"></div>
 
-<div class="w-full min-h-screen bg-[#FAFAFA] px-10 lg:px-20 py-10">
-    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm p-10">
-        <h1 class="text-4xl font-bold text-zinc-900 mb-6">My Account</h1>
+<div class="w-full flex-1 bg-[#FAFAFA] px-6 lg:px-16 py-10">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="space-y-4">
-                <p class="text-zinc-600">Full Name</p>
-                <p class="text-xl font-semibold text-zinc-900"><%= user.fullname || 'Not set' %></p>
+    <div class="max-w-5xl mx-auto space-y-10">
+
+        <!-- User Profile Card -->
+        <div class="bg-white rounded-3xl border border-zinc-200/80 shadow-sm p-8 md:p-10">
+
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-zinc-100">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-bold">
+                        <%= (user.fullname || 'U')[0].toUpperCase() %>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-zinc-900"><%= user.fullname %></h1>
+                        <p class="text-sm text-zinc-500"><%= user.email %></p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <a href="/shop" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-sm font-medium transition">
+                        <i class="ri-store-line"></i>
+                        Shop
+                    </a>
+                    <a href="/logout" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-red-50 hover:bg-red-100 text-red-600 text-sm font-medium transition">
+                        <i class="ri-logout-box-line"></i>
+                        Logout
+                    </a>
+                </div>
             </div>
 
-            <div class="space-y-4">
-                <p class="text-zinc-600">Email</p>
-                <p class="text-xl font-semibold text-zinc-900"><%= user.email %></p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
+                <div class="bg-zinc-50 p-4 rounded-2xl">
+                    <span class="text-xs uppercase text-zinc-400 font-semibold block mb-1">Account Holder</span>
+                    <span class="font-semibold text-zinc-800 text-base"><%= user.fullname %></span>
+                </div>
+
+                <div class="bg-zinc-50 p-4 rounded-2xl">
+                    <span class="text-xs uppercase text-zinc-400 font-semibold block mb-1">Registered Email</span>
+                    <span class="font-semibold text-zinc-800 text-base break-all"><%= user.email %></span>
+                </div>
+
+                <div class="bg-zinc-50 p-4 rounded-2xl">
+                    <span class="text-xs uppercase text-zinc-400 font-semibold block mb-1">Total Orders</span>
+                    <span class="font-semibold text-zinc-800 text-base"><%= user.orders ? user.orders.length : 0 %></span>
+                </div>
             </div>
+
         </div>
 
-        <div class="mt-10 space-y-4">
-            <div>
-                <p class="text-zinc-600">Contact</p>
-                <p class="text-xl font-semibold text-zinc-900"><%= user.contact || 'Not provided' %></p>
+        <!-- Orders Section -->
+        <div class="bg-white rounded-3xl border border-zinc-200/80 shadow-sm p-8 md:p-10">
+
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-zinc-900 flex items-center gap-2">
+                    <i class="ri-history-line text-blue-600"></i>
+                    Order History
+                </h2>
+                <span class="text-sm text-zinc-500 font-medium">
+                    <%= user.orders?.length || 0 %> past <%= (user.orders?.length === 1) ? 'order' : 'orders' %>
+                </span>
             </div>
 
-            <div>
-                <p class="text-zinc-600">Orders</p>
-                <p class="text-xl font-semibold text-zinc-900"><%= user.orders?.length || 0 %> past order(s)</p>
-            </div>
+            <% if (!user.orders || user.orders.length === 0) { %>
+                <div class="text-center py-12 border border-dashed border-zinc-200 rounded-2xl">
+                    <i class="ri-inbox-line text-4xl text-zinc-300 mb-3 block"></i>
+                    <h3 class="text-lg font-semibold text-zinc-700 mb-1">No orders placed yet</h3>
+                    <p class="text-sm text-zinc-400 mb-6">Discover our luxury bags and place your first order!</p>
+                    <a href="/shop" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-zinc-900 text-white text-sm font-medium hover:bg-black transition">
+                        Start Shopping
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="space-y-6">
+                    <% user.orders.forEach(function(order){ %>
+                        <div class="border border-zinc-200/80 rounded-2xl p-6 hover:border-zinc-300 transition bg-zinc-50/40">
+
+                            <!-- Order Header -->
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-4 mb-4 border-b border-zinc-200">
+                                <div>
+                                    <span class="text-xs text-zinc-400 uppercase font-semibold">Order ID</span>
+                                    <h4 class="font-bold text-zinc-900 text-base"><%= order.orderId || 'Order' %></h4>
+                                </div>
+
+                                <div class="flex items-center gap-4 text-sm">
+                                    <span class="text-zinc-500"><%= order.date || 'Recently' %></span>
+                                    <span class="bg-emerald-100 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full">
+                                        <%= order.status || 'Confirmed' %>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Order Items -->
+                            <div class="space-y-3 mb-4">
+                                <% if (order.items && order.items.length > 0) { %>
+                                    <% order.items.forEach(function(item){ %>
+                                        <div class="flex justify-between items-center text-sm">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-medium text-zinc-800"><%= item.name || 'Bag' %></span>
+                                                <span class="text-zinc-400 text-xs">x <%= item.quantity || 1 %></span>
+                                            </div>
+                                            <span class="font-semibold text-zinc-900">₹ <%= item.subtotal || item.price %></span>
+                                        </div>
+                                    <% }) %>
+                                <% } else { %>
+                                    <div class="text-sm text-zinc-500">Order items details</div>
+                                <% } %>
+                            </div>
+
+                            <!-- Order Total -->
+                            <div class="pt-3 border-t border-zinc-200 flex justify-between items-center text-sm font-medium">
+                                <span class="text-zinc-600">Amount Paid (inc. Platform fee):</span>
+                                <span class="text-lg font-bold text-zinc-900">₹ <%= order.totalAmount || order.bill || 0 %></span>
+                            </div>
+
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+
         </div>
 
-        <div class="mt-12">
-            <a href="/shop" class="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-white hover:bg-zinc-800 transition">
-                <i class="ri-arrow-left-line"></i>
-                Back to shop
-            </a>
-        </div>
     </div>
+
 </div>
 
 <%- include('./partials/footer') %>

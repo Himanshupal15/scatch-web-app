@@ -2,23 +2,17 @@
 
 <div class="pt-24"></div>
 
-<% if(success.length > 0){ %>
-    <div class="absolute top-8 left-1/2 -translate-x-1/2 p-4 rounded-xl bg-blue-500 shadow-lg z-50">
-        <span class="text-white font-medium">
-            <%= success %>
-        </span>
-    </div>
-<% } %>
-
-<div class="w-full min-h-screen flex px-10 lg:px-20 py-10 bg-[#FAFAFA]">
+<div class="w-full flex-1 flex flex-col md:flex-row px-6 lg:px-16 py-10 bg-[#FAFAFA]">
 
     <!-- Sidebar -->
-    <div class="w-[25%] pr-10 sticky top-28 self-start">
+    <aside class="w-full md:w-[22%] pr-0 md:pr-8 mb-8 md:mb-0">
 
-        <!-- Sort -->
-        <div>
-            <div class="flex items-center gap-3 mb-10">
-                <h3 class="font-semibold text-lg">
+        <!-- Sticky container on desktop -->
+        <div class="bg-white p-6 rounded-2xl border border-zinc-200/80 shadow-sm md:sticky md:top-28">
+
+            <!-- Sort By -->
+            <div class="mb-8">
+                <h3 class="font-semibold text-base text-zinc-900 mb-3">
                     Sort By
                 </h3>
 
@@ -26,106 +20,136 @@
                     <select
                         name="sort"
                         onchange="this.form.submit()"
-                        class="bg-white border border-zinc-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-
-                        <option value="popular" <%= sort === 'popular' || !sort ? 'selected' : '' %>>Popular</option>
-                        <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>Newest</option>
-
+                        class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <option value="popular" <%= typeof sort === 'undefined' || sort === 'popular' || !sort ? 'selected' : '' %>>Popular</option>
+                        <option value="newest" <%= typeof sort !== 'undefined' && sort === 'newest' ? 'selected' : '' %>>Newest First</option>
                     </select>
                 </form>
             </div>
+
+            <!-- Collections -->
+            <div class="mb-8">
+                <h4 class="font-semibold text-base text-zinc-900 mb-3">
+                    Collections
+                </h4>
+
+                <div class="flex flex-col space-y-2 text-sm">
+                    <a class="px-3 py-2 rounded-lg font-medium transition <%= (typeof collection === 'undefined' || !collection) && (typeof filter === 'undefined' || !filter) ? 'bg-blue-50 text-blue-600' : 'text-zinc-600 hover:bg-zinc-50' %>"
+                        href="/shop?sort=<%= typeof sort !== 'undefined' ? sort : 'popular' %>">
+                        All Bags
+                    </a>
+
+                    <a class="px-3 py-2 rounded-lg font-medium transition <%= (typeof collection !== 'undefined' && collection === 'discounted') ? 'bg-blue-50 text-blue-600' : 'text-zinc-600 hover:bg-zinc-50' %>"
+                        href="/shop?sort=<%= typeof sort !== 'undefined' ? sort : 'popular' %>&collection=discounted">
+                        Special Offers & Discounts
+                    </a>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div>
+                <h4 class="font-semibold text-base text-zinc-900 mb-3">
+                    Quick Filter
+                </h4>
+
+                <div class="flex flex-col space-y-2 text-sm">
+                    <a class="px-3 py-2 rounded-lg font-medium transition <%= (typeof filter !== 'undefined' && filter === 'discount') ? 'bg-blue-50 text-blue-600' : 'text-zinc-600 hover:bg-zinc-50' %>"
+                        href="/shop?sort=<%= typeof sort !== 'undefined' ? sort : 'popular' %>&filter=discount">
+                        On Sale
+                    </a>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Categories -->
-        <div class="mb-12">
-            <h4 class="font-semibold text-lg mb-5">
-                Collections
-            </h4>
+    </aside>
 
-            <div class="flex flex-col">
-                <a class="mb-3 text-zinc-600 hover:text-blue-600 transition font-medium"
-                    href="/shop?sort=<%= sort || 'popular' %>">
-                    All Products
-                </a>
+    <!-- Product Grid -->
+    <main class="w-full md:w-[78%]">
 
-                <a class="mb-3 text-zinc-600 hover:text-blue-600 transition font-medium"
-                    href="/shop?sort=<%= sort || 'popular' %>&collection=discounted">
-                    Discounted Products
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl font-bold text-zinc-900">
+                Explore Collection
+            </h1>
+            <span class="text-sm text-zinc-500 font-medium">
+                <%= products.length %> <%= products.length === 1 ? 'product' : 'products' %>
+            </span>
+        </div>
+
+        <% if (products.length === 0) { %>
+            <div class="w-full bg-white rounded-3xl p-16 text-center border border-zinc-200/80 shadow-sm">
+                <div class="w-20 h-20 mx-auto rounded-full bg-zinc-100 flex items-center justify-center text-zinc-400 text-3xl mb-4">
+                    <i class="ri-shopping-bag-line"></i>
+                </div>
+                <h2 class="text-2xl font-semibold text-zinc-900 mb-2">No products found</h2>
+                <p class="text-zinc-500 max-w-sm mx-auto mb-6 text-sm">We could not find any bags matching the current filter. Try resetting your filter.</p>
+                <a href="/shop" class="inline-flex items-center gap-2 px-6 py-2.5 bg-zinc-900 text-white rounded-full text-sm font-medium hover:bg-black transition">
+                    View All Products
                 </a>
             </div>
-        </div>
+        <% } else { %>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
 
-        <!-- Filters -->
-        <div>
-            <h4 class="font-semibold text-lg mb-5">
-                Filters
-            </h4>
+                <% products.forEach(function(product){ %>
 
-            <div class="flex flex-col">
-                <a class="mb-3 text-zinc-600 hover:text-blue-600 transition font-medium"
-                    href="/shop?sort=<%= sort || 'popular' %>&filter=availability">
-                    Availability
-                </a>
+                    <div class="bg-white rounded-2xl overflow-hidden border border-zinc-200/70 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col justify-between">
 
-                <a class="mb-3 text-zinc-600 hover:text-blue-600 transition font-medium"
-                    href="/shop?sort=<%= sort || 'popular' %>&filter=discount">
-                    Discount
-                </a>
-            </div>
-        </div>
+                        <!-- Image Container with dynamic inline background -->
+                        <div class="w-full h-64 flex items-center justify-center relative overflow-hidden"
+                             style="background-color: <%= product.bgcolor || '#f4f4f5' %>;">
 
-    </div>
+                            <% if (product.discount && Number(product.discount) > 0) { %>
+                                <span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                                    ₹<%= product.discount %> OFF
+                                </span>
+                            <% } %>
 
-    <!-- Products -->
-    <div class="w-[75%]">
+                            <img
+                                class="h-48 object-contain transition duration-300 group-hover:scale-105"
+                                src="<%= product.image ? 'data:image/jpeg;base64,' + product.image.toString('base64') : '/images/1bag.png' %>"
+                                alt="<%= product.name %>"
+                                loading="lazy">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-
-            <% products.forEach(function(product){ %>
-
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 group">
-
-                    <!-- Product Image -->
-                    <div class="w-full h-64 flex items-center justify-center bg-[<%= product.bgcolor %>] overflow-hidden">
-
-                        <img
-                            class="h-52 object-contain transition duration-300 group-hover:scale-105"
-                            src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
-                            alt="<%= product.name %>">
-
-                    </div>
-
-                    <!-- Product Details -->
-                    <div class="flex justify-between items-center px-5 py-5">
-
-                        <div>
-                            <h3 class="font-semibold text-lg">
-                                <%= product.name %>
-                            </h3>
-
-                            <h4 class="mt-1 font-medium text-zinc-700">
-                                ₹ <%= product.price %>
-                            </h4>
-                             
                         </div>
 
-                        <a
-                            href="/addtocart/<%= product._id %>"
-                            class="w-11 h-11 rounded-full bg-zinc-900 text-white flex items-center justify-center hover:bg-blue-600 transition">
+                        <!-- Product Details -->
+                        <div class="p-5 flex justify-between items-center"
+                             style="background-color: <%= product.panelcolor || '#ffffff' %>;">
 
-                            <i class="ri-shopping-bag-line"></i>
+                            <div>
+                                <h3 class="font-semibold text-base text-zinc-900 group-hover:text-blue-600 transition">
+                                    <%= product.name %>
+                                </h3>
 
-                        </a>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="font-bold text-lg text-zinc-900">
+                                        ₹ <%= product.price - (Number(product.discount) || 0) %>
+                                    </span>
+                                    <% if (product.discount && Number(product.discount) > 0) { %>
+                                        <span class="text-xs text-zinc-400 line-through">
+                                            ₹ <%= product.price %>
+                                        </span>
+                                    <% } %>
+                                </div>
+                            </div>
+
+                            <a
+                                href="/addtocart/<%= product._id %>"
+                                title="Add to Cart"
+                                class="w-10 h-10 rounded-full bg-zinc-900 text-white flex items-center justify-center hover:bg-blue-600 transition shadow-sm">
+                                <i class="ri-shopping-bag-line text-lg"></i>
+                            </a>
+
+                        </div>
 
                     </div>
 
-                </div>
+                <% }) %>
 
-            <% }) %>
+            </div>
+        <% } %>
 
-        </div>
-
-    </div>
+    </main>
 
 </div>
 

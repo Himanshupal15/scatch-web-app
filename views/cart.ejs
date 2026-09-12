@@ -2,208 +2,197 @@
 
 <div class="pt-24"></div>
 
-<div class="w-full min-h-screen bg-[#FAFAFA] px-10 lg:px-20 py-10">
+<div class="w-full flex-1 bg-[#FAFAFA] px-6 lg:px-16 py-10">
 
     <div class="flex justify-between items-center mb-8">
-        <a href="/shop" class="inline-flex items-center gap-2 rounded-full border border-zinc-300 px-4 py-2 text-zinc-700 hover:bg-zinc-100 transition">
+        <a href="/shop" class="inline-flex items-center gap-2 rounded-full border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-100 transition">
             <i class="ri-arrow-left-line"></i>
             Continue shopping
         </a>
     </div>
 
-    <div class="flex flex-col lg:flex-row gap-10">
+    <% const cartHasProducts = user.cart && user.cart.some(function(item){ return item && item.product; }); %>
 
-        <!-- Cart Items -->
-        <div class="lg:w-[70%]">
+    <% if (!cartHasProducts) { %>
+        <div class="max-w-2xl mx-auto bg-white rounded-3xl border border-zinc-200/80 shadow-sm p-12 text-center my-10">
+            <div class="w-20 h-20 mx-auto rounded-full bg-zinc-100 flex items-center justify-center text-zinc-400 text-3xl mb-5">
+                <i class="ri-shopping-bag-3-line"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-zinc-900 mb-3">Your cart is empty</h2>
+            <p class="text-zinc-500 mb-8 text-base">Looks like you haven't added any luxury bags to your cart yet.</p>
+            <a href="/shop" class="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-8 py-3.5 text-white font-medium hover:bg-black transition shadow-md">
+                <i class="ri-shopping-bag-line"></i>
+                Start Shopping
+            </a>
+        </div>
+    <% } else { %>
+        <div class="flex flex-col lg:flex-row gap-10">
 
-            <% const cartHasProducts = user.cart && user.cart.some(function(item){ return item.product; }); %>
-            <% if (!cartHasProducts) { %>
-                <div class="bg-white rounded-3xl shadow-sm p-8 mb-8 text-center">
-                    <h2 class="text-3xl font-semibold text-zinc-900 mb-3">Your cart is empty</h2>
-                    <p class="text-zinc-600 mb-6">Add products from the shop to start building your order.</p>
-                    <a href="/shop" class="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-white hover:bg-zinc-800 transition">
-                        <i class="ri-shopping-bag-line"></i>
-                        Browse shop
-                    </a>
-                </div>
-            <% } else { %>
+            <!-- Cart Items List -->
+            <div class="lg:w-[68%] space-y-6">
+
                 <% user.cart.forEach(function(item){ %>
-                    <% if (!item.product) return; %>
+                    <% if (!item || !item.product) return; %>
 
-                <div class="bg-white rounded-3xl shadow-sm hover:shadow-lg transition duration-300 p-8 mb-8 cart-item" data-product-id="<%= item.product._id %>">
+                    <div class="bg-white rounded-3xl border border-zinc-200/70 shadow-sm hover:shadow-md transition p-6 md:p-8 cart-item" data-product-id="<%= item.product._id %>">
 
-                <div class="flex flex-col md:flex-row gap-8">
+                        <div class="flex flex-col sm:flex-row gap-6">
 
-                    <!-- Product Image -->
-                    <div class="md:w-[35%]">
-                        <div class="rounded-2xl overflow-hidden border border-zinc-200">
-
-                            <div class="w-full h-72 flex justify-center items-center bg-[<%= item.product.bgcolor %>]">
+                            <!-- Product Image -->
+                            <div class="sm:w-48 h-48 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0"
+                                 style="background-color: <%= item.product.bgcolor || '#f4f4f5' %>;">
 
                                 <img
-                                    class="h-60 object-contain transition duration-300 hover:scale-105"
-                                    src="data:image/jpeg;base64,<%= item.product.image.toString('base64') %>"
+                                    class="h-36 object-contain"
+                                    src="<%= item.product.image ? 'data:image/jpeg;base64,' + item.product.image.toString('base64') : '/images/1bag.png' %>"
                                     alt="<%= item.product.name %>">
 
                             </div>
 
-                        </div>
-                    </div>
-
-                    <!-- Product Details -->
-                    <div class="md:w-[65%] flex flex-col justify-between">
-
-                        <div>
-
-                            <div class="flex justify-between items-start">
+                            <!-- Product Info & Actions -->
+                            <div class="flex-1 flex flex-col justify-between">
 
                                 <div>
-                                    <h3 class="text-2xl font-semibold text-zinc-800">
-                                        <%= item.product.name %>
-                                    </h3>
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-zinc-900">
+                                                <%= item.product.name %>
+                                            </h3>
+                                            <p class="text-xs uppercase tracking-wider text-zinc-400 font-semibold mt-0.5">
+                                                Premium Collection
+                                            </p>
+                                        </div>
 
-                                    <p class="text-zinc-500 mt-1">
-                                        Premium Collection
-                                    </p>
+                                        <a
+                                            href="/cart/remove/<%= item.product._id %>"
+                                            class="text-red-500 hover:text-red-600 text-sm font-medium flex items-center gap-1 transition">
+                                            <i class="ri-delete-bin-line"></i>
+                                            Remove
+                                        </a>
+                                    </div>
+
+                                    <div class="mt-4 flex flex-wrap gap-4 text-sm">
+                                        <div class="text-zinc-600">
+                                            Base Price: <span class="font-semibold text-zinc-900">₹<%= item.product.price %></span>
+                                        </div>
+                                        <% if (Number(item.product.discount) > 0) { %>
+                                            <div class="text-emerald-600 font-medium">
+                                                Discount: -₹<%= Number(item.product.discount) %>
+                                            </div>
+                                        <% } %>
+                                    </div>
                                 </div>
 
-                                <a
-                                    href="/cart/remove/<%= item.product._id %>"
-                                    class="text-red-500 hover:text-red-600 font-medium">
-                                    Remove
-                                </a>
+                                <!-- Quantity Controls & Line Total -->
+                                <div class="flex justify-between items-center mt-6 pt-4 border-t border-zinc-100">
 
-                            </div>
+                                    <div class="flex items-center gap-2">
+                                        <button
+                                            type="button"
+                                            data-product-id="<%= item.product._id %>"
+                                            class="qty-btn decrease w-9 h-9 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 transition flex items-center justify-center font-bold">
+                                            <i class="ri-subtract-line"></i>
+                                        </button>
 
-                            <div class="mt-6 space-y-3">
+                                        <span class="w-10 text-center font-bold text-zinc-900 qty-value" data-product-id="<%= item.product._id %>">
+                                            <%= item.quantity || 1 %>
+                                        </span>
 
-                                <div class="flex justify-between">
-                                    <span class="text-zinc-600">Price</span>
+                                        <button
+                                            type="button"
+                                            data-product-id="<%= item.product._id %>"
+                                            class="qty-btn increase w-9 h-9 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 transition flex items-center justify-center font-bold">
+                                            <i class="ri-add-line"></i>
+                                        </button>
+                                    </div>
 
-                                    <span class="font-medium">
-                                        ₹ <%= item.product.price %>
-                                    </span>
+                                    <div class="text-right">
+                                        <span class="text-xs text-zinc-400 block uppercase">Subtotal</span>
+                                        <span class="text-xl font-bold text-zinc-900">
+                                            ₹ <span class="item-subtotal" data-product-id="<%= item.product._id %>">
+                                                <%= (Number(item.product.price) - Number(item.product.discount || 0)) * (Number(item.quantity) || 1) %>
+                                            </span>
+                                        </span>
+                                    </div>
+
                                 </div>
-
-                                <div class="flex justify-between">
-                                    <span class="text-zinc-600">Discount</span>
-
-                                    <span class="text-green-600 font-medium">
-                                        - ₹ <%= Number(item.product.discount) %>
-                                    </span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- Quantity -->
-                        <div class="flex justify-between items-center mt-8">
-
-
-                                <div class="flex items-center gap-3">
-
-                                <button type="button" data-product-id="<%= item.product._id %>" class="qty-btn decrease w-10 h-10 rounded-full bg-zinc-100 hover:bg-zinc-200 transition flex items-center justify-center">
-                                    <i class="ri-subtract-line"></i>
-                                </button>
-
-                                <div class="px-5 py-2 rounded-xl bg-zinc-100 font-semibold qty-value" data-product-id="<%= item.product._id %>">
-                                    <%= item.quantity || 1 %>
-                                </div>
-
-                                <button type="button" data-product-id="<%= item.product._id %>" class="qty-btn increase w-10 h-10 rounded-full bg-zinc-100 hover:bg-zinc-200 transition flex items-center justify-center">
-                                    <i class="ri-add-line"></i>
-                                </button>
-
-                            </div>
-
-                            <div class="text-right">
-
-                                <p class="text-sm text-zinc-500">
-                                    Item Total
-                                </p>
-
-                                <h3 class="text-2xl font-bold text-zinc-900">
-                                    ₹ <span class="item-subtotal" data-product-id="<%= item.product._id %>"><%= (item.product.price - Number(item.product.discount)) * (item.quantity || 1) %></span>
-                                </h3>
 
                             </div>
 
                         </div>
 
                     </div>
-
-                </div>
-
-            </div>
 
                 <% }) %>
-            <% } %>
 
-        </div>
+            </div>
 
-        <!-- Order Summary -->
-        <div class="lg:w-[30%]">
+            <!-- Order Summary Sidebar -->
+            <div class="lg:w-[32%]">
 
-            <div class="sticky top-28 bg-white rounded-3xl shadow-sm p-8">
+                <div class="sticky top-28 bg-white rounded-3xl border border-zinc-200/80 shadow-sm p-8">
 
-                <h2 class="text-4xl font-bold text-zinc-900 mb-8">
-                    Order Summary
-                </h2>
+                    <h2 class="text-2xl font-bold text-zinc-900 mb-6 pb-4 border-b border-zinc-100">
+                        Order Summary
+                    </h2>
 
-                <div class="space-y-5">
+                    <div class="space-y-4 text-sm">
 
-                    <div class="flex justify-between">
-                        <span class="text-zinc-600">
-                            Cart Total
+                        <div class="flex justify-between text-zinc-600">
+                            <span>Cart Total</span>
+                            <span class="font-semibold text-zinc-900">
+                                ₹ <span id="items-total"><%= itemsTotal %></span>
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between text-zinc-600">
+                            <span>Shipping</span>
+                            <span class="text-emerald-600 font-semibold uppercase tracking-wider text-xs bg-emerald-50 px-2 py-0.5 rounded">
+                                FREE
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between text-zinc-600">
+                            <span>Platform Fee</span>
+                            <span class="font-semibold text-zinc-900">
+                                ₹ 20
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="w-full h-px bg-zinc-200 my-6"></div>
+
+                    <div class="flex justify-between items-baseline mb-8">
+                        <span class="text-base font-semibold text-zinc-800">
+                            Total Payable
                         </span>
-
-                        <span class="font-medium">
-                            ₹ <span id="items-total"><%= itemsTotal %></span>
+                        <span class="text-3xl font-extrabold text-zinc-900">
+                            ₹ <span id="bill-total"><%= bill %></span>
                         </span>
                     </div>
 
-                    <div class="flex justify-between">
-                        <span class="text-zinc-600">
-                            Shipping
-                        </span>
+                    <!-- Checkout Form -->
+                    <form action="/cart/checkout" method="post">
+                        <button
+                            type="submit"
+                            class="w-full py-4 bg-zinc-900 text-white rounded-2xl font-semibold hover:bg-black transition shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="ri-shield-check-line text-lg"></i>
+                            Place Order (Cash On Delivery)
+                        </button>
+                    </form>
 
-                        <span class="text-green-600 font-medium">
-                            FREE
-                        </span>
+                    <div class="mt-4 flex items-center justify-center gap-2 text-xs text-zinc-400">
+                        <i class="ri-lock-2-line"></i>
+                        <span>Guaranteed Safe & Secure Checkout</span>
                     </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-zinc-600">
-                            Platform Fee
-                        </span>
-
-                        <span class="font-medium">
-                            ₹ 20
-                        </span>
-                    </div>
-
-                </div>
-
-                <div class="w-full h-px bg-zinc-200 my-8"></div>
-
-                <div class="flex justify-between items-center">
-
-                    <h3 class="text-xl font-semibold">
-                        Total Amount
-                    </h3>
-
-                    <h3 class="text-3xl font-bold text-green-600">
-                        ₹ <span id="bill-total"><%= bill %></span>
-                    </h3>
 
                 </div>
 
             </div>
 
         </div>
-
-    </div>
+    <% } %>
 
 </div>
 
@@ -213,6 +202,11 @@ document.addEventListener('click', async function(e){
     if (!btn) return;
     const productId = btn.dataset.productId;
     const action = btn.classList.contains('increase') ? 'increase' : 'decrease';
+    
+    // Temporarily disable buttons for this item to prevent spamming
+    const itemButtons = document.querySelectorAll(`.qty-btn[data-product-id="${productId}"]`);
+    itemButtons.forEach(b => b.disabled = true);
+
     try {
         const res = await fetch('/cart/update-quantity', {
             method: 'POST',
@@ -241,7 +235,9 @@ document.addEventListener('click', async function(e){
             if (!anyItems) location.reload();
         }
     } catch (err) {
-        console.error(err);
+        console.error("Failed to update cart:", err);
+    } finally {
+        itemButtons.forEach(b => b.disabled = false);
     }
 });
 </script>

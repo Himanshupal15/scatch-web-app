@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scatch</title>
+    <title>Scatch — Premium Bags</title>
 
     <!-- Remix Icons -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
@@ -14,47 +14,89 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Smooth transitions */
+        * { transition-property: color, background-color, border-color; transition-duration: 150ms; }
+    </style>
 </head>
 
-<body class="font-['Inter'] bg-[#FAFAFA] text-zinc-800">
+<body class="font-['Inter'] bg-[#FAFAFA] text-zinc-800 flex flex-col min-h-screen">
 
-    <nav class="w-full fixed top-0 left-0 z-50 px-10 py-5 bg-white/90 backdrop-blur-md border-b border-zinc-200 flex items-center justify-between">
+    <nav class="w-full fixed top-0 left-0 z-50 px-6 md:px-12 py-5 bg-white/95 backdrop-blur-md border-b border-zinc-200 flex items-center justify-between">
 
         <!-- Logo -->
-       <h3 class="text-2xl font-bold tracking-[0.25em] text-zinc-900">
-    SCATCH
-</h3>
+        <a href="<%= (typeof isOwner !== 'undefined' && isOwner) ? '/owners/admin' : '/shop' %>" class="text-2xl font-bold tracking-[0.25em] text-zinc-900 hover:text-blue-600 transition">
+            SCATCH
+        </a>
 
         <% var loggedin = typeof loggedin !== "undefined" ? loggedin : false %>
+        <% var ownerUser = typeof isOwner !== "undefined" ? isOwner : false %>
 
-        <% if(loggedin){ %>
-            <div class="flex items-center gap-8 text-[15px] font-medium">
-
-                <a href="/shop"
-                   class="hover:text-blue-600 transition duration-200">
+        <div class="flex items-center gap-6 md:gap-8 text-[15px] font-medium">
+            <% if (ownerUser) { %>
+                <a href="/owners/admin" class="hover:text-blue-600 transition flex items-center gap-1.5">
+                    <i class="ri-dashboard-line"></i>
+                    Admin
+                </a>
+                <a href="/owners/create-product" class="hover:text-blue-600 transition flex items-center gap-1.5">
+                    <i class="ri-add-circle-line"></i>
+                    New Product
+                </a>
+                <a href="/shop" class="hover:text-blue-600 transition flex items-center gap-1.5">
+                    <i class="ri-store-2-line"></i>
+                    Store View
+                </a>
+                <a href="/owners/logout" class="text-red-500 hover:text-red-600 transition">
+                    Admin Logout
+                </a>
+            <% } else if (loggedin) { %>
+                <a href="/shop" class="hover:text-blue-600 transition">
                     Shop
                 </a>
-
-                <a href="/cart"
-                   class="hover:text-blue-600 transition duration-200 flex items-center gap-1">
+                <a href="/cart" class="hover:text-blue-600 transition flex items-center gap-1">
                     <i class="ri-shopping-bag-line"></i>
                     Cart
                 </a>
-
-                <a href="/account"
-                   class="hover:text-blue-600 transition duration-200 flex items-center gap-1">
+                <a href="/account" class="hover:text-blue-600 transition flex items-center gap-1">
                     <i class="ri-user-line"></i>
                     My Account
                 </a>
-
-                <a href="/logout"
-                   class="text-red-500 hover:text-red-600 transition duration-200">
+                <a href="/logout" class="text-red-500 hover:text-red-600 transition">
                     Logout
                 </a>
+            <% } else { %>
+                <a href="/" class="hover:text-blue-600 transition">
+                    Sign In
+                </a>
+                <a href="/owners/login" class="text-xs bg-zinc-100 hover:bg-zinc-200 text-zinc-700 px-3 py-1.5 rounded-full transition">
+                    Admin Access
+                </a>
+            <% } %>
+        </div>
 
+    </nav>
+
+    <!-- Global Toast Alerts -->
+    <div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-11/12 max-w-md pointer-events-none">
+        <% if (typeof error !== "undefined" && error && error.length > 0) { %>
+            <div class="pointer-events-auto flex items-center justify-between p-4 rounded-2xl bg-red-500 text-white shadow-xl text-sm font-medium transition transform">
+                <div class="flex items-center gap-2">
+                    <i class="ri-error-warning-line text-lg"></i>
+                    <span><%= error[0] || error %></span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="ml-4 opacity-80 hover:opacity-100"><i class="ri-close-line"></i></button>
             </div>
         <% } %>
 
-    </nav>
+        <% if (typeof success !== "undefined" && success && success.length > 0) { %>
+            <div class="pointer-events-auto flex items-center justify-between p-4 rounded-2xl bg-emerald-600 text-white shadow-xl text-sm font-medium transition transform">
+                <div class="flex items-center gap-2">
+                    <i class="ri-checkbox-circle-line text-lg"></i>
+                    <span><%= success[0] || success %></span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="ml-4 opacity-80 hover:opacity-100"><i class="ri-close-line"></i></button>
+            </div>
+        <% } %>
+    </div>

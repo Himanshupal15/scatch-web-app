@@ -2,40 +2,55 @@
 
 <div class="pt-24"></div>
 
-<% if(success.length > 0){ %>
-    <div class="fixed top-24 left-1/2 -translate-x-1/2 p-4 rounded-2xl bg-green-500 shadow-lg z-50">
-        <span class="text-white font-medium">
-            <%= success %>
-        </span>
-    </div>
-<% } %>
-
-<div class="min-h-screen bg-[#FAFAFA] px-10 lg:px-20 py-10">
+<div class="min-h-screen bg-[#FAFAFA] px-6 lg:px-16 py-10">
 
     <div class="flex flex-col lg:flex-row gap-10">
 
         <!-- Sidebar -->
-        <aside class="lg:w-[25%]">
+        <aside class="lg:w-[24%]">
 
-            <div class="bg-white rounded-3xl shadow-sm p-8 sticky top-28">
+            <div class="bg-white rounded-3xl border border-zinc-200/80 shadow-sm p-8 sticky top-28">
 
-                <h2 class="font-['Playfair_Display'] text-3xl font-bold mb-8">
-                    Admin Panel
-                </h2>
+                <div class="mb-6 pb-6 border-b border-zinc-100">
+                    <span class="text-xs uppercase font-bold tracking-widest text-blue-600 block mb-1">
+                        Control Center
+                    </span>
+                    <h2 class="text-2xl font-bold text-zinc-900">
+                        Admin Portal
+                    </h2>
+                </div>
 
-                <div class="flex flex-col gap-4">
+                <div class="flex flex-col space-y-2 text-sm font-medium">
 
                     <a
-                        class="font-medium text-zinc-700 hover:text-blue-600 transition"
+                        class="px-4 py-3 rounded-xl text-zinc-700 hover:bg-zinc-100 transition flex items-center gap-2"
                         href="/owners/admin">
+                        <i class="ri-archive-line"></i>
                         All Products
                     </a>
 
                     <a
-                        class="font-medium text-blue-600"
-                        href="/owners/create">
+                        class="px-4 py-3 rounded-xl bg-zinc-900 text-white flex items-center gap-2 shadow-sm"
+                        href="/owners/create-product">
+                        <i class="ri-add-circle-line text-blue-400"></i>
                         Create New Product
                     </a>
+
+                    <a
+                        class="px-4 py-3 rounded-xl text-zinc-700 hover:bg-zinc-100 transition flex items-center gap-2"
+                        href="/shop">
+                        <i class="ri-store-2-line"></i>
+                        View Customer Store
+                    </a>
+
+                    <div class="pt-4 mt-2 border-t border-zinc-100">
+                        <a
+                            class="px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition flex items-center gap-2"
+                            href="/owners/logout">
+                            <i class="ri-logout-box-r-line"></i>
+                            Admin Logout
+                        </a>
+                    </div>
 
                 </div>
 
@@ -43,14 +58,19 @@
 
         </aside>
 
-        <!-- Main Content -->
-        <main class="lg:w-[75%]">
+        <!-- Main Form -->
+        <main class="lg:w-[76%]">
 
-            <div class="bg-white rounded-3xl shadow-sm p-10">
+            <div class="bg-white rounded-3xl border border-zinc-200/80 shadow-sm p-8 md:p-12">
 
-                <h2 class="font-['Playfair_Display'] text-4xl font-bold text-zinc-900 mb-10">
-                    Create New Product
-                </h2>
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-zinc-900">
+                        Create New Product
+                    </h1>
+                    <p class="text-sm text-zinc-500 mt-1">
+                        Upload a premium bag and set custom prices and themes.
+                    </p>
+                </div>
 
                 <form
                     autocomplete="off"
@@ -59,103 +79,110 @@
                     enctype="multipart/form-data">
 
                     <!-- Product Details -->
-                    <div class="mb-12">
+                    <div class="mb-10">
 
-                        <h3 class="text-2xl font-semibold text-zinc-800 mb-6">
-                            Product Details
+                        <h3 class="text-lg font-semibold text-zinc-800 mb-4 pb-2 border-b border-zinc-100 flex items-center gap-2">
+                            <i class="ri-information-line text-blue-600"></i>
+                            Basic Information
                         </h3>
 
                         <!-- Image Upload -->
-                        <div class="mb-8">
+                        <div class="mb-6">
 
-                            <label class="block mb-3 font-medium text-zinc-700">
-                                Product Image
+                            <label class="block mb-2 font-medium text-sm text-zinc-700">
+                                Product Image <span class="text-red-500">*</span>
                             </label>
 
                             <input
                                 name="image"
                                 type="file"
+                                accept="image/*"
                                 required
-                                class="w-full border border-dashed border-zinc-300 rounded-2xl p-4 file:mr-4 file:px-5 file:py-2 file:rounded-xl file:border-0 file:bg-blue-500 file:text-white hover:file:bg-blue-600">
+                                class="w-full border border-dashed border-zinc-300 rounded-2xl p-4 text-sm file:mr-4 file:px-5 file:py-2.5 file:rounded-xl file:border-0 file:bg-zinc-900 file:text-white hover:file:bg-black file:cursor-pointer transition">
 
                         </div>
 
-                        <!-- Product Inputs -->
-                        <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Inputs -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                            <input
-                                name="name"
-                                type="text"
-                                placeholder="Product Name"
-                                required
-                                class="border border-zinc-200 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <div>
+                                <label class="block mb-2 font-medium text-sm text-zinc-700">Product Name <span class="text-red-500">*</span></label>
+                                <input
+                                    name="name"
+                                    type="text"
+                                    placeholder="e.g. Classic Leather Tote"
+                                    required
+                                    class="w-full border border-zinc-200 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
 
-                            <input
-                                name="price"
-                                type="number"
-                                placeholder="Price"
-                                required
-                                class="border border-zinc-200 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <div>
+                                <label class="block mb-2 font-medium text-sm text-zinc-700">Base Price (₹) <span class="text-red-500">*</span></label>
+                                <input
+                                    name="price"
+                                    type="number"
+                                    min="1"
+                                    step="1"
+                                    placeholder="e.g. 1500"
+                                    required
+                                    class="w-full border border-zinc-200 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
 
-                            <input
-                                name="discount"
-                                type="number"
-                                placeholder="Discount"
-                                class="border border-zinc-200 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <div>
+                                <label class="block mb-2 font-medium text-sm text-zinc-700">Discount Amount (₹)</label>
+                                <input
+                                    name="discount"
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    placeholder="e.g. 200 (optional)"
+                                    class="w-full border border-zinc-200 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
 
                         </div>
 
                     </div>
 
                     <!-- Theme Settings -->
-                    <div>
+                    <div class="mb-10">
 
-                        <h3 class="text-2xl font-semibold text-zinc-800 mb-6">
-                            Product Theme
+                        <h3 class="text-lg font-semibold text-zinc-800 mb-4 pb-2 border-b border-zinc-100 flex items-center gap-2">
+                            <i class="ri-palette-line text-blue-600"></i>
+                            Card Styling & Appearance
                         </h3>
 
-                        <div class="grid md:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                             <div>
-
-                                <label class="block mb-2 text-zinc-600">
+                                <label class="block mb-2 text-sm font-medium text-zinc-700">
                                     Background Color
                                 </label>
-
                                 <input
                                     name="bgcolor"
                                     type="color"
-                                    value="#f4f4f5"
-                                    class="w-full h-14 rounded-xl cursor-pointer border border-zinc-200">
-
+                                    value="#e4e4e7"
+                                    class="w-full h-12 rounded-xl cursor-pointer border border-zinc-200 p-1">
                             </div>
 
                             <div>
-
-                                <label class="block mb-2 text-zinc-600">
-                                    Panel Color
+                                <label class="block mb-2 text-sm font-medium text-zinc-700">
+                                    Panel Footer Color
                                 </label>
-
                                 <input
                                     name="panelcolor"
                                     type="color"
                                     value="#ffffff"
-                                    class="w-full h-14 rounded-xl cursor-pointer border border-zinc-200">
-
+                                    class="w-full h-12 rounded-xl cursor-pointer border border-zinc-200 p-1">
                             </div>
 
                             <div>
-
-                                <label class="block mb-2 text-zinc-600">
+                                <label class="block mb-2 text-sm font-medium text-zinc-700">
                                     Text Color
                                 </label>
-
                                 <input
                                     name="textcolor"
                                     type="color"
                                     value="#18181b"
-                                    class="w-full h-14 rounded-xl cursor-pointer border border-zinc-200">
-
+                                    class="w-full h-12 rounded-xl cursor-pointer border border-zinc-200 p-1">
                             </div>
 
                         </div>
@@ -163,15 +190,18 @@
                     </div>
 
                     <!-- Submit -->
-                    <div class="mt-12">
+                    <div class="flex items-center gap-4 pt-6 border-t border-zinc-100">
 
                         <button
                             type="submit"
-                            class="px-8 py-4 bg-zinc-900 text-white rounded-2xl font-medium hover:bg-black transition">
-
-                            Create Product
-
+                            class="px-8 py-3.5 bg-zinc-900 text-white rounded-xl font-medium hover:bg-black transition shadow-md flex items-center gap-2 cursor-pointer">
+                            <i class="ri-check-line text-lg"></i>
+                            Publish Product
                         </button>
+
+                        <a href="/owners/admin" class="px-6 py-3.5 rounded-xl border border-zinc-200 text-zinc-600 hover:bg-zinc-50 transition text-sm font-medium">
+                            Cancel
+                        </a>
 
                     </div>
 
