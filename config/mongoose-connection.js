@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const config = require("config");
 const dbgr = require("debug")("development:mongoose");
 
 let mongoURI = process.env.MONGODB_URI || process.env.MONGO_URI;
@@ -9,11 +8,7 @@ if (process.env.NODE_ENV === "production" && !mongoURI) {
 }
 
 if (!mongoURI) {
-  try {
-    mongoURI = config.has("MONGODB_URI") ? config.get("MONGODB_URI") : "mongodb://127.0.0.1:27017/scatch";
-  } catch (e) {
-    mongoURI = "mongodb://127.0.0.1:27017/scatch";
-  }
+  mongoURI = "mongodb://127.0.0.1:27017/scatch";
 }
 
 // If connection string is just host/port without database, append /scatch
