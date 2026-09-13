@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const readline = require("readline");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const ownerModel = require("../models/owner-model");
 const db = require("../config/mongoose-connection");
 

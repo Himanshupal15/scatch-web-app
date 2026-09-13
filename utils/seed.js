@@ -5,7 +5,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const productModel = require("../models/product-model");
 const ownerModel = require("../models/owner-model");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const db = require("../config/mongoose-connection");
 
 const sampleBags = [
