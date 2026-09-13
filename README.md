@@ -185,8 +185,3 @@ If the service fails during startup, verify that the hosting provider has all of
 
 The application listens on the platform-provided `PORT` and binds to `0.0.0.0`. After adding or changing environment variables, trigger a new deployment.
 
-### Deploying to Vercel
-
-Import the repository as a Vercel project with the repository root as the project root. Vercel uses `api/index.js` as the serverless Express entrypoint and `vercel.json` to route the application from the site root.
-
-In Vercel Project Settings > Environment Variables, add `MONGODB_URI`, `JWT_KEY`, `EXPRESS_SESSION_SECRET`, and `NODE_ENV=production` for the Production environment. The MongoDB Atlas network settings must allow connections from Vercel.
