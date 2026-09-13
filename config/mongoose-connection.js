@@ -25,15 +25,17 @@ if (mongoURI.startsWith("mongodb://") && !mongoURI.includes("/scatch") && !mongo
   }
 }
 
-mongoose
+const connectionPromise = mongoose
   .connect(mongoURI)
   .then(function () {
     console.log(`Connected to MongoDB successfully: ${mongoURI.replace(/\/\/.*@/, "//***:***@")}`);
     dbgr("Connected");
+    return mongoose.connection;
   })
   .catch(function (err) {
     console.error("MongoDB connection error:", err.message);
     dbgr(err);
+    throw err;
   });
 
-module.exports = mongoose.connection;
+module.exports = connectionPromise;

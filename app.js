@@ -49,6 +49,15 @@ app.use(flash());
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 
+app.use(async (req, res, next) => {
+  try {
+    await db;
+    next();
+  } catch (err) {
+    res.status(503).send("Database connection unavailable. Please try again shortly.");
+  }
+});
+
 // Global view variables
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
